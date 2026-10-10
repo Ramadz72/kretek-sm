@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0B0C09;
+  --foreground: #F3F0E5;
+  --botanical: #8BCB25;
+  --gold: #E8C83E;
+  --charcoal: #151711;
+}
+
+/* Lenis smooth scrolling rules */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Base Body Styles */
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+  selection-background-color: #8BCB25;
+  selection-color: #0B0C09;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: #8BCB25;
+  color: #0B0C09;
+}
+
+/* Subtle Film Grain Texture Overlay */
+.film-grain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Editorial typography utilities */
+.font-display {
+  font-family: var(--font-outfit), sans-serif;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #F4DD6D 0%, #E8C83E 50%, #BFA225 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-botanical {
+  background: linear-gradient(135deg, #A3DC3B 0%, #8BCB25 50%, #679B18 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-silver {
+  background: linear-gradient(180deg, #FFFFFF 0%, #D8D4C7 80%, #7E7C74 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Luxury border effects */
+.border-gold-subtle {
+  border-color: rgba(232, 200, 62, 0.2);
+}
+
+.border-botanical-subtle {
+  border-color: rgba(139, 203, 37, 0.2);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0C09;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #23271D;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8BCB25;
+}
+
+/* Accessibility: Reduced motion overrides */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
