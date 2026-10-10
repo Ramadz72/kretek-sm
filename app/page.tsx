@@ -20,7 +20,7 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <main className="relative min-h-screen bg-obsidian text-ivory selection:bg-botanical selection:text-obsidian overflow-x-hidden">
+    <main className="relative min-h-screen bg-obsidian text-ivory selection:bg-botanical selection:text-obsidian">
       {/* Desktop Magnetic Follower Cursor */}
       <CustomCursor />
 

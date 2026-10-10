@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Leaf, Sparkles, Filter } from 'lucide-react';
+import { Leaf, Filter, UsersRound } from 'lucide-react';
 import { INGREDIENTS, IngredientCategory } from '@/lib/ingredients';
 
 export default function IngredientShowcase() {
@@ -139,7 +139,7 @@ export default function IngredientShowcase() {
         {/* Responsible Disclaimer Banner */}
         <div className="mt-16 p-5 rounded-2xl bg-charcoal-200/90 border border-gold/20 flex flex-col sm:flex-row items-center gap-4 text-xs font-mono text-ivory-muted text-center sm:text-left">
           <div className="p-2.5 rounded-xl bg-charcoal-50 text-gold border border-gold/30 shrink-0">
-            <Sparkles className="w-5 h-5" />
+            <UsersRound className="w-5 h-5" />
           </div>
           <div>
             <span className="font-bold text-ivory block mb-0.5">Komitmen Komunikasi Bertanggung Jawab:</span>

@@ -1,4 +1,4 @@
-// File: D:\laragon\kretek-sm\app\page.tsx
+// File: c:\laragon\www\kretek-sm\app\page.tsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

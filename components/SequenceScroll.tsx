@@ -1,7 +1,8 @@
+
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, Sparkles } from 'lucide-react';
 import { SITE_CONFIG } from '@/lib/site-config';
 
@@ -10,250 +11,344 @@ interface SequenceScrollProps {
   onLoaded?: () => void;
 }
 
-export default function SequenceScroll({ onLoadProgress, onLoaded }: SequenceScrollProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+export default function SequenceScroll({
+  onLoadProgress,
+  onLoaded,
+}: SequenceScrollProps) {
+  const containerRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [images, setImages] = useState<HTMLImageElement[]>([]);
   const [isReady, setIsReady] = useState(false);
   const [loadError, setLoadError] = useState(false);
 
-  const totalFrames = SITE_CONFIG.sequence.totalFrames; // 240 frames
-  const currentFrameRef = useRef<number>(0);
-  const rafIdRef = useRef<number | null>(null);
+  const totalFrames = SITE_CONFIG.sequence.totalFrames;
 
-  // Motion scroll binding
+  const imagesRef = useRef<Array<HTMLImageElement | undefined>>([]);
+  const currentFrameRef = useRef(0);
+  const rafIdRef = useRef<number | null>(null);
+  const readyRef = useRef(false);
+  const loadedCallbackRef = useRef(false);
+
+  const callbacksRef = useRef({ onLoadProgress, onLoaded });
+
+  useEffect(() => {
+    callbacksRef.current = { onLoadProgress, onLoaded };
+  }, [onLoadProgress, onLoaded]);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  // Storytelling Opacity & Translation Transforms
-  // Phase 1: 0% - 20%
-  const opacity1 = useTransform(scrollYProgress, [0, 0.12, 0.20], [1, 1, 0]);
-  const y1 = useTransform(scrollYProgress, [0, 0.20], [0, -30]);
+  // Storytelling opacity dan posisi teks
+  const opacity1 = useTransform(
+    scrollYProgress,
+    [0, 0.12, 0.2],
+    [1, 1, 0]
+  );
+  const y1 = useTransform(scrollYProgress, [0, 0.2], [0, -30]);
 
-  // Phase 2: 24% - 45%
-  const opacity2 = useTransform(scrollYProgress, [0.22, 0.28, 0.38, 0.46], [0, 1, 1, 0]);
-  const y2 = useTransform(scrollYProgress, [0.22, 0.28, 0.38, 0.46], [40, 0, 0, -30]);
-
-  // Phase 3: 52% - 75%
-  const opacity3 = useTransform(scrollYProgress, [0.52, 0.58, 0.68, 0.76], [0, 1, 1, 0]);
-  const y3 = useTransform(scrollYProgress, [0.52, 0.58, 0.68, 0.76], [40, 0, 0, -30]);
-
-  // Phase 4: 82% - 100%
-  const opacity4 = useTransform(scrollYProgress, [0.82, 0.88, 1], [0, 1, 1]);
-  const y4 = useTransform(scrollYProgress, [0.82, 0.88, 1], [40, 0, 0]);
-
-  // Scroll indicator fade out
-  const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
-
-  // Draw frame to canvas with aspect-ratio cover calculation
-  const drawFrame = useCallback(
-    (index: number) => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
-      
-      const img =
-        images[index]?.complete && images[index]?.naturalWidth > 0
-          ? images[index]
-          : [...images]
-              .slice(0, index + 1)
-              .reverse()
-              .find((frame) => frame?.complete && frame.naturalWidth > 0)
-            ?? images.find(
-              (frame) => frame?.complete && frame.naturalWidth > 0
-            );
-
-      if (!img || !img.complete || img.naturalWidth === 0) {
-        return;
-      }
-
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const canvasWidth = canvas.clientWidth;
-      const canvasHeight = canvas.clientHeight;
-
-      if (canvas.width !== canvasWidth * dpr || canvas.height !== canvasHeight * dpr) {
-        canvas.width = canvasWidth * dpr;
-        canvas.height = canvasHeight * dpr;
-      }
-
-      ctx.save();
-      ctx.scale(dpr, dpr);
-
-      // Cover calculation
-      const imgWidth = img.naturalWidth || img.width;
-      const imgHeight = img.naturalHeight || img.height;
-      const hRatio = canvasWidth / imgWidth;
-      const vRatio = canvasHeight / imgHeight;
-      const ratio = Math.max(hRatio, vRatio);
-
-      const shiftX = (canvasWidth - imgWidth * ratio) / 2;
-      const shiftY = (canvasHeight - imgHeight * ratio) / 2;
-
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-      ctx.drawImage(
-        img,
-        0,
-        0,
-        imgWidth,
-        imgHeight,
-        shiftX,
-        shiftY,
-        imgWidth * ratio,
-        imgHeight * ratio
-      );
-
-      ctx.restore();
-    },
-    [images]
+  const opacity2 = useTransform(
+    scrollYProgress,
+    [0.22, 0.28, 0.38, 0.46],
+    [0, 1, 1, 0]
+  );
+  const y2 = useTransform(
+    scrollYProgress,
+    [0.22, 0.28, 0.38, 0.46],
+    [40, 0, 0, -30]
   );
 
-  // Progressive Preloading
-  useEffect(() => {
-    let isCancelled = false;
-    const loadedImages: HTMLImageElement[] = new Array(totalFrames);
-    let loadedCount = 0;
+  const opacity3 = useTransform(
+    scrollYProgress,
+    [0.52, 0.58, 0.68, 0.76],
+    [0, 1, 1, 0]
+  );
+  const y3 = useTransform(
+    scrollYProgress,
+    [0.52, 0.58, 0.68, 0.76],
+    [40, 0, 0, -30]
+  );
 
-    // Check prefers-reduced-motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const opacity4 = useTransform(
+    scrollYProgress,
+    [0.82, 0.88, 1],
+    [0, 1, 1]
+  );
+  const y4 = useTransform(scrollYProgress, [0.82, 0.88, 1], [40, 0, 0]);
 
-    const frameUrl = (idx: number) => {
-      const numStr = String(idx + 1).padStart(3, '0');
-      return `${SITE_CONFIG.sequence.folder}/${SITE_CONFIG.sequence.fileNamePrefix}${numStr}${SITE_CONFIG.sequence.fileExtension}`;
-    };
+  const scrollIndicatorOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.08],
+    [1, 0]
+  );
 
-    // Helper to load single image
-    const loadSingleImage = (i: number): Promise<HTMLImageElement> => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.src = frameUrl(i);
-        img.onload = () => resolve(img);
-        img.onerror = () => reject(new Error(`Failed to load frame ${i}`));
-      });
-    };
+  // Gambar frame yang paling sesuai dengan posisi scroll.
+  // Jika frame target belum siap, gunakan frame terdekat yang tersedia.
+  const drawFrame = useCallback((requestedIndex: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    // If reduced motion is requested, load just the final hero frame
-    if (prefersReducedMotion) {
-      loadSingleImage(totalFrames - 1)
-        .then((img) => {
-          if (isCancelled) return;
-          loadedImages[0] = img;
-          setImages([img]);
-          setIsReady(true);
-          onLoadProgress?.(100);
-          onLoaded?.();
-        })
-        .catch(() => setLoadError(true));
-      return () => {
-        isCancelled = true;
-      };
-    }
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-    // Step 1: Preload priority frames (first 30 frames and last frame) for immediate rendering
-    const priorityIndices = Array.from({ length: Math.min(30, totalFrames) }, (_, i) => i);
-    priorityIndices.push(totalFrames - 1);
+    const frames = imagesRef.current;
+    const index = Math.max(
+      0,
+      Math.min(requestedIndex, frames.length - 1)
+    );
 
-    Promise.allSettled(
-      priorityIndices.map(async (i) => {
-        try {
-          const img = await loadSingleImage(i);
-          if (!isCancelled) {
-            loadedImages[i] = img;
-            loadedCount++;
-            onLoadProgress?.(Math.min(100, Math.round((loadedCount / totalFrames) * 100)));
-          }
-        } catch (e) {
-          console.warn(e);
-        }
-      })
-    ).then(() => {
-      if (isCancelled) return;
-      
-      setImages([...loadedImages]);
+    let img = frames[index];
 
-      const firstValidFrame = loadedImages.find(
-        (img) => img?.complete && img.naturalWidth > 0
+    const isUsable = (frame?: HTMLImageElement) =>
+      Boolean(
+        frame?.complete &&
+        frame.naturalWidth > 0 &&
+        frame.naturalHeight > 0
       );
 
-      if (!firstValidFrame) {
+    if (!isUsable(img)) {
+      img = undefined;
+
+      for (let distance = 1; distance < frames.length; distance++) {
+        const beforeIndex = index - distance;
+        const afterIndex = index + distance;
+
+        if (beforeIndex >= 0 && isUsable(frames[beforeIndex])) {
+          img = frames[beforeIndex];
+          break;
+        }
+
+        if (afterIndex < frames.length && isUsable(frames[afterIndex])) {
+          img = frames[afterIndex];
+          break;
+        }
+      }
+    }
+
+    if (!img || !isUsable(img)) return;
+
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+
+    if (!width || !height) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const pixelWidth = Math.round(width * dpr);
+    const pixelHeight = Math.round(height * dpr);
+
+    if (
+      canvas.width !== pixelWidth ||
+      canvas.height !== pixelHeight
+    ) {
+      canvas.width = pixelWidth;
+      canvas.height = pixelHeight;
+    }
+
+    const scale = Math.max(
+      width / img.naturalWidth,
+      height / img.naturalHeight
+    );
+
+    const drawWidth = img.naturalWidth * scale;
+    const drawHeight = img.naturalHeight * scale;
+    const x = (width - drawWidth) / 2;
+    const y = (height - drawHeight) / 2;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(img, x, y, drawWidth, drawHeight);
+  }, []);
+
+  // Preload frame satu kali dengan jumlah request yang dibatasi.
+  useEffect(() => {
+    let cancelled = false;
+    let nextIndex = 0;
+    let activeWorkers = 0;
+    let loadedCount = 0;
+    let failedCount = 0;
+    let callbackSent = false;
+
+    const frames: Array<HTMLImageElement | undefined> =
+      new Array(totalFrames);
+
+    imagesRef.current = frames;
+    readyRef.current = false;
+    loadedCallbackRef.current = false;
+
+    setIsReady(false);
+    setLoadError(false);
+
+    const frameUrl = (index: number) => {
+      const number = String(index + 1).padStart(3, '0');
+
+      return `${SITE_CONFIG.sequence.folder}/${SITE_CONFIG.sequence.fileNamePrefix}${number}${SITE_CONFIG.sequence.fileExtension}`;
+    };
+
+    const notifyLoaded = () => {
+      if (cancelled || callbackSent) return;
+
+      callbackSent = true;
+      loadedCallbackRef.current = true;
+      callbacksRef.current.onLoaded?.();
+    };
+
+    const reportProgress = () => {
+      if (cancelled) return;
+
+      const progress = Math.round(
+        ((loadedCount + failedCount) / totalFrames) * 100
+      );
+
+      callbacksRef.current.onLoadProgress?.(progress);
+    };
+
+    const markFrameLoaded = (
+      index: number,
+      img: HTMLImageElement
+    ) => {
+      if (cancelled) return;
+
+      frames[index] = img;
+      loadedCount++;
+
+      reportProgress();
+
+      if (!readyRef.current) {
+        readyRef.current = true;
+        setIsReady(true);
+        notifyLoaded();
+      }
+
+      // Frame yang baru tersedia langsung dapat digunakan.
+      drawFrame(currentFrameRef.current);
+    };
+
+    const markFrameFailed = (index: number) => {
+      if (cancelled) return;
+
+      failedCount++;
+      console.warn(`Gagal memuat frame ${index + 1}: ${frameUrl(index)}`);
+      reportProgress();
+    };
+
+    const finish = () => {
+      if (cancelled) return;
+
+      if (loadedCount + failedCount !== totalFrames) return;
+
+      if (loadedCount === 0) {
         setLoadError(true);
         return;
       }
 
-      setIsReady(true);
-      onLoaded?.();
+      callbacksRef.current.onLoadProgress?.(100);
+      notifyLoaded();
+    };
 
-      // Step 2: Progressively load remaining frames in background
-      const remainingIndices = Array.from({ length: totalFrames }, (_, i) => i).filter(
-        (i) => !priorityIndices.includes(i)
-      );
+    const loadSingleFrame = (index: number) => {
+      const img = new Image();
 
-      const batchSize = 10;
-      let currentIndex = 0;
+      img.onload = () => {
+        if (cancelled) return;
 
-      const loadNextBatch = () => {
-        if (isCancelled || currentIndex >= remainingIndices.length) return;
-        const currentBatch = remainingIndices.slice(currentIndex, currentIndex + batchSize);
-        currentIndex += batchSize;
-
-        Promise.allSettled(
-          currentBatch.map(async (i) => {
-            try {
-              const img = await loadSingleImage(i);
-              if (!isCancelled) {
-                loadedImages[i] = img;
-                loadedCount++;
-                onLoadProgress?.(Math.min(100, Math.round((loadedCount / totalFrames) * 100)));
-              }
-            } catch (e) {
-              console.warn(e);
-            }
-          })
-        ).then(() => {
-          if (!isCancelled) {
-            setImages([...loadedImages]);
-            setTimeout(loadNextBatch, 30);
-          }
-        });
+        markFrameLoaded(index, img);
+        finish();
       };
 
-      loadNextBatch();
-    });
+      img.onerror = () => {
+        if (cancelled) return;
+
+        markFrameFailed(index);
+        finish();
+      };
+
+      img.src = frameUrl(index);
+    };
+
+    const reducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    if (reducedMotion) {
+      // Untuk preferensi reduced motion, tampilkan frame terakhir.
+      loadSingleFrame(totalFrames - 1);
+
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    // Batasi request bersamaan agar browser tidak dibanjiri request.
+    const concurrency = 8;
+
+    const worker = () => {
+      if (cancelled) return;
+
+      while (
+        activeWorkers < concurrency &&
+        nextIndex < totalFrames
+      ) {
+        const index = nextIndex++;
+        activeWorkers++;
+
+        const img = new Image();
+
+        img.onload = () => {
+          if (cancelled) return;
+
+          activeWorkers--;
+          markFrameLoaded(index, img);
+          finish();
+          worker();
+        };
+
+        img.onerror = () => {
+          if (cancelled) return;
+
+          activeWorkers--;
+          markFrameFailed(index);
+          finish();
+          worker();
+        };
+
+        img.src = frameUrl(index);
+      }
+    };
+
+    worker();
 
     return () => {
-      isCancelled = true;
+      cancelled = true;
     };
-  }, [totalFrames, onLoadProgress, onLoaded]);
+  }, [totalFrames, drawFrame]);
 
-  // Sync scroll with frame draw
+  // Listener scroll tunggal: tidak bergantung pada jumlah frame yang sudah dimuat.
   useEffect(() => {
-    if (!isReady || images.length === 0) return;
+    const renderCurrentFrame = () => {
+      rafIdRef.current = null;
+      drawFrame(currentFrameRef.current);
+    };
 
-    const unsubscribe = scrollYProgress.on('change', (progress) => {
+    const scheduleDraw = (progress: number) => {
       const targetIndex = Math.min(
         totalFrames - 1,
-        Math.max(0, Math.floor(progress * (totalFrames - 1)))
+        Math.max(0, Math.round(progress * (totalFrames - 1)))
       );
 
-      if (targetIndex !== currentFrameRef.current) {
-        currentFrameRef.current = targetIndex;
+      currentFrameRef.current = targetIndex;
 
-        if (rafIdRef.current) {
-          cancelAnimationFrame(rafIdRef.current);
-        }
-
-        rafIdRef.current = requestAnimationFrame(() => {
-          drawFrame(targetIndex);
-        });
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
       }
-    });
 
-    // Redraw frame sesuai posisi scroll terakhir
-    drawFrame(currentFrameRef.current);
+      rafIdRef.current = requestAnimationFrame(renderCurrentFrame);
+    };
+
+    const unsubscribe = scrollYProgress.on('change', scheduleDraw);
+
+    // Sinkronkan frame saat pertama kali efek dijalankan.
+    scheduleDraw(scrollYProgress.get());
 
     const handleResize = () => {
       drawFrame(currentFrameRef.current);
@@ -264,156 +359,183 @@ export default function SequenceScroll({ onLoadProgress, onLoaded }: SequenceScr
     return () => {
       unsubscribe();
       window.removeEventListener('resize', handleResize);
-      if (rafIdRef.current) {
+
+      if (rafIdRef.current !== null) {
         cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
       }
     };
-  }, [isReady, images, totalFrames, scrollYProgress, drawFrame]);
+  }, [scrollYProgress, totalFrames, drawFrame]);
 
   return (
     <section
       id="hero"
       ref={containerRef}
       className="relative w-full bg-obsidian"
-      style={{ height: `${SITE_CONFIG.sequence.scrollDistanceVh}vh` }}
+      style={{
+        height: `${SITE_CONFIG.sequence.scrollDistanceVh}vh`,
+      }}
     >
-      {/* Sticky Fullscreen Canvas / Hero Container */}
-      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden flex items-center justify-center">
-        {/* Background Atmosphere Glow */}
-        <div className="absolute inset-0 bg-dark-botanical pointer-events-none z-0" />
-        <div className="absolute w-[600px] h-[600px] rounded-full bg-botanical/10 blur-[150px] pointer-events-none -top-20 left-1/2 -translate-x-1/2 z-0" />
-        <div className="absolute w-[500px] h-[500px] rounded-full bg-gold/10 blur-[130px] pointer-events-none bottom-10 left-1/2 -translate-x-1/2 z-0" />
+      <div className="sticky top-0 left-0 flex h-screen w-full items-center justify-center overflow-hidden">
+        {/* Background atmosphere */}
+        <div className="absolute inset-0 z-0 bg-dark-botanical pointer-events-none" />
 
-        {/* The Image-Sequence Canvas */}
+        <div className="absolute -top-20 left-1/2 z-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-botanical/10 blur-[150px] pointer-events-none" />
+
+        <div className="absolute bottom-10 left-1/2 z-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-gold/10 blur-[130px] pointer-events-none" />
+
+        {/* Image sequence */}
         {!loadError ? (
           <canvas
             ref={canvasRef}
-            className="absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-700"
-            style={{ opacity: isReady ? 1 : 0 }}
+            className="absolute inset-0 z-10 block h-full w-full"
+            style={{
+              opacity: isReady ? 1 : 0,
+            }}
           />
         ) : (
-          /* High-End Visual Fallback if Sequence fails */
-          <div className="absolute inset-0 flex items-center justify-center z-10">
-            <div className="relative w-72 sm:w-96 aspect-[3/4]">
+          <div className="absolute inset-0 z-10 flex items-center justify-center">
+            <div className="relative aspect-[3/4] w-72 sm:w-96">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/images/products/apel-mint.jpg"
                 alt="Kretek Rempah SM"
-                className="w-full h-full object-contain filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+                className="h-full w-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
               />
             </div>
           </div>
         )}
 
-        {/* Ambient Dark Gradient Overlays for Seamless Text Readability */}
-        {/*<div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/30 to-obsidian/60 pointer-events-none z-20" />*/}
-        {/*<div className="absolute inset-0 bg-radial-gradient from-transparent via-obsidian/40 to-obsidian pointer-events-none z-20" />*/}
-
-        {/* =========================================================================
-            HERO STORYTELLING OVERLAYS (Scroll-Linked)
-           ========================================================================= */}
-
-        {/* Phase 1: 0% */}
+        {/* Storytelling phase 1 */}
         <motion.div
           style={{ opacity: opacity1, y: y1 }}
-          className="absolute inset-0 z-30 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none"
+          className="absolute inset-0 z-30 flex flex-col items-center justify-center px-4 text-center pointer-events-none sm:px-6"
         >
-          <div className="max-w-4xl mx-auto flex flex-col items-center">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-charcoal-200/90 border border-botanical/30 text-botanical font-mono text-[10px] sm:text-xs uppercase tracking-editorial mb-6 shadow-inner">
-              <span className="w-1.5 h-1.5 rounded-full bg-botanical animate-pulse" />
+          <div className="mx-auto flex max-w-4xl flex-col items-center">
+            <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-botanical/30 bg-charcoal-200/90 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-editorial text-botanical shadow-inner sm:text-xs">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-botanical" />
               INDONESIAN BOTANICAL HERITAGE
             </span>
 
-            <h1 className="font-display font-black text-5xl sm:text-7xl lg:text-8xl tracking-tight text-ivory mb-6 leading-[1.05]">
-              Rempah. <span className="text-gradient-gold">Karakter.</span> <span className="italic font-light">Kreasi.</span>
+            <h1 className="mb-6 text-5xl font-black leading-[1.05] tracking-tight text-ivory font-display sm:text-7xl lg:text-8xl">
+              Rempah. <span className="text-gradient-gold">Karakter.</span>{' '}
+              <span className="font-light italic">Kreasi.</span>
             </h1>
 
-            <p className="max-w-2xl text-base sm:text-xl text-ivory-muted leading-relaxed font-sans font-light">
-              Kenali <strong className="text-ivory font-semibold">Kretek Rempah SM</strong>, kretek dengan karakter visual yang berakar pada kekayaan rempah Indonesia.
+            <p className="max-w-2xl text-base font-light leading-relaxed text-ivory-muted font-sans sm:text-xl">
+              Kenali{' '}
+              <strong className="font-semibold text-ivory">
+                Kretek Rempah SM
+              </strong>
+              , kretek dengan karakter visual yang berakar pada kekayaan
+              rempah Indonesia.
             </p>
           </div>
         </motion.div>
 
-        {/* Phase 2: 25% - 30% (Left Aligned Editorial) */}
+        {/* Storytelling phase 2 */}
         <motion.div
           style={{ opacity: opacity2, y: y2 }}
-          className="absolute inset-0 z-30 flex items-center justify-start px-6 sm:px-12 lg:px-24 pointer-events-none"
+          className="absolute inset-0 z-30 flex items-center justify-start px-6 pointer-events-none sm:px-12 lg:px-24"
         >
           <div className="max-w-xl text-left">
-            <span className="font-mono text-xs uppercase tracking-editorial text-botanical block mb-3">
+            <span className="mb-3 block font-mono text-xs uppercase tracking-editorial text-botanical">
               01 • FILOSOFI BAHAN ALAMI
             </span>
-            <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-ivory tracking-tight mb-4 leading-tight">
-              Berakar dari <span className="text-gradient-botanical">kekayaan rempah.</span>
+
+            <h2 className="mb-4 text-3xl font-extrabold leading-tight tracking-tight text-ivory font-display sm:text-5xl lg:text-6xl">
+              Berakar dari{' '}
+              <span className="text-gradient-botanical">
+                kekayaan rempah.
+              </span>
             </h2>
-            <p className="text-base sm:text-lg text-ivory-muted leading-relaxed font-light">
-              Jelajahi perpaduan visual bahan-bahan rempah yang menjadi bagian dari identitas Kretek Rempah SM.
+
+            <p className="text-base font-light leading-relaxed text-ivory-muted sm:text-lg">
+              Jelajahi perpaduan visual bahan-bahan rempah yang menjadi
+              bagian dari identitas Kretek Rempah SM.
             </p>
-            <div className="w-20 h-[2px] bg-gradient-to-r from-botanical to-transparent mt-6" />
+
+            <div className="mt-6 h-[2px] w-20 bg-gradient-to-r from-botanical to-transparent" />
           </div>
         </motion.div>
 
-        {/* Phase 3: 55% - 65% (Right Aligned Editorial) */}
+        {/* Storytelling phase 3 */}
         <motion.div
           style={{ opacity: opacity3, y: y3 }}
-          className="absolute inset-0 z-30 flex items-center justify-end px-6 sm:px-12 lg:px-24 pointer-events-none"
+          className="absolute inset-0 z-30 flex items-center justify-end px-6 pointer-events-none sm:px-12 lg:px-24"
         >
           <div className="max-w-xl text-right">
-            <span className="font-mono text-xs uppercase tracking-editorial text-gold block mb-3">
+            <span className="mb-3 block font-mono text-xs uppercase tracking-editorial text-gold">
               02 • SINTESIS KONTEMPORER
             </span>
-            <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-ivory tracking-tight mb-4 leading-tight">
-              Tradisi dalam <span className="text-gradient-gold">karakter modern.</span>
+
+            <h2 className="mb-4 text-3xl font-extrabold leading-tight tracking-tight text-ivory font-display sm:text-5xl lg:text-6xl">
+              Tradisi dalam{' '}
+              <span className="text-gradient-gold ">
+                karakter modern.
+              </span>
             </h2>
-            <p className="text-base sm:text-lg text-ivory-muted leading-relaxed font-light">
-              Identitas yang mempertemukan inspirasi herbal Nusantara dengan pendekatan desain yang kontemporer.
+
+            <p className="text-base font-light leading-relaxed text-ivory-muted sm:text-lg">
+              Identitas yang mempertemukan inspirasi herbal Nusantara
+              dengan pendekatan desain yang kontemporer.
             </p>
-            <div className="w-20 h-[2px] bg-gradient-to-l from-gold to-transparent mt-6 ml-auto" />
+
+            <div className="ml-auto mt-6 h-[2px] w-20 bg-gradient-to-l from-gold to-transparent" />
           </div>
         </motion.div>
 
-        {/* Phase 4: 85% - 95% (Centered CTA) */}
+        {/* Storytelling phase 4 */}
         <motion.div
           style={{ opacity: opacity4, y: y4 }}
-          className="absolute inset-0 z-30 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-auto"
+          className="absolute inset-0 z-30 flex flex-col items-center justify-center px-4 text-center pointer-events-auto sm:px-6"
         >
-          <div className="max-w-2xl mx-auto flex flex-col items-center">
-            <span className="text-xs font-mono uppercase tracking-widest text-botanical mb-4">
+          <div className="mx-auto flex max-w-2xl flex-col items-center">
+            <span className="mb-4 font-mono text-xs uppercase tracking-widest text-botanical">
               KRETEK MULTIHERBAL NUSANTARA
             </span>
 
-            <h2 className="font-display font-black text-4xl sm:text-6xl text-ivory tracking-tight mb-6 leading-tight">
-              Jelajahi Koleksi <br />
-              <span className="text-gradient-gold">Kretek Rempah SM</span>
+            <h2 className="mb-6 text-4xl font-black leading-tight tracking-tight text-ivory font-display sm:text-6xl">
+              Jelajahi Koleksi
+              <br />
+              <span className="text-gradient-gold">
+                Kretek Rempah SM
+              </span>
             </h2>
 
-            <p className="text-base sm:text-lg text-ivory-muted max-w-lg mb-8 font-light">
-              Sentuhan 17 rempah dan 5 tembakau pilihan, dirancang dalam harmoni rasa yang berkelas.
+            <p className="mb-8 max-w-lg text-base font-light text-ivory-muted sm:text-lg">
+              Sentuhan 17 rempah dan 5 tembakau pilihan, dirancang dalam
+              harmoni rasa yang berkelas.
             </p>
 
             <a
               href="#koleksi"
-              className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full bg-botanical hover:bg-botanical-light text-obsidian font-display font-bold text-sm tracking-widest uppercase transition-all duration-300 shadow-luxury hover:scale-105 active:scale-95"
+              className="group relative inline-flex items-center gap-3 rounded-full bg-botanical px-8 py-4 text-sm font-bold uppercase tracking-widest text-obsidian shadow-luxury transition-all duration-300 hover:scale-105 hover:bg-botanical-light active:scale-95 font-display"
             >
               <span>LIHAT PRODUK</span>
-              <Sparkles className="w-4 h-4 text-obsidian group-hover:rotate-45 transition-transform" />
+              <Sparkles className="h-4 w-4 text-obsidian transition-transform group-hover:rotate-45" />
             </a>
           </div>
         </motion.div>
 
-        {/* Scroll Down Indicator */}
+        {/* Scroll indicator */}
         <motion.div
           style={{ opacity: scrollIndicatorOpacity }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 pointer-events-none text-ivory-muted"
+          className="absolute bottom-10 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-2 text-ivory-muted pointer-events-none"
         >
-          <span className="text-[10px] font-mono tracking-editorial uppercase text-ivory-dark">
+          <span className="font-mono text-[10px] uppercase tracking-editorial text-ivory-dark">
             Gulir Untuk Menjelajah
           </span>
+
           <motion.div
             animate={{ y: [0, 6, 0] }}
-            transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
+            transition={{
+              repeat: Infinity,
+              duration: 1.6,
+              ease: 'easeInOut',
+            }}
           >
-            <ArrowDown className="w-4 h-4 text-botanical" />
+            <ArrowDown className="h-4 w-4 text-botanical" />
           </motion.div>
         </motion.div>
       </div>

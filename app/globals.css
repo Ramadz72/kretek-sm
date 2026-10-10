@@ -121,3 +121,15 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+
+/* Soft shadow khusus teks di atas image sequence */
+.sequence-text-shadow {
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+.sequence-heading-shadow {
+  text-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.45),
+    0 5px 20px rgba(0, 0, 0, 0.2);
+}

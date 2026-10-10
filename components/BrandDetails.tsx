@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Sparkles, ShieldCheck, Feather, Layers } from 'lucide-react';
+import { Sparkles, ShieldCheck, Feather, Layers, ShoppingBag } from 'lucide-react';
 import { SITE_CONFIG } from '@/lib/site-config';
 
 interface CounterProps {
@@ -64,7 +64,7 @@ export default function BrandDetails() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
           <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-charcoal-100 border border-gold/30 text-gold font-mono text-[11px] uppercase tracking-editorial mb-4">
-            <Sparkles className="w-3.5 h-3.5 text-botanical" />
+            <ShoppingBag className="w-3.5 h-3.5 text-botanical" />
             STANDAR & SPESIFIKASI TERVERIFIKASI
           </span>
           <h2 className="font-display font-extrabold text-3xl sm:text-5xl text-ivory tracking-tight mb-4">

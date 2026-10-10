@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Menu, Sparkles } from 'lucide-react';
+import { Menu, ShoppingCart } from 'lucide-react';
 import FullscreenMenu from './FullscreenMenu';
 
 export default function Navbar() {
@@ -33,15 +33,18 @@ export default function Navbar() {
             className="group flex items-center gap-3 transition-transform duration-300 hover:scale-[1.02]"
             aria-label="Kembali ke Beranda Kretek Rempah SM"
           >
-            <div className="relative h-9 w-32 sm:h-11 sm:w-44">
-              <Image
-                src="/images/logo/logo-horizontal.png"
-                alt="Kretek Rempah SM Logo"
-                fill
-                priority
-                className="object-contain object-left drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
-              />
-            </div>
+            
+          <div className="relative h-20 w-72 sm:h-16 sm:w-60">
+            <Image
+              src="/images/logo/logo-horizontal.png"
+              alt="Kretek Rempah SM Logo"
+              fill
+              priority
+              className="object-contain object-left drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
+            />
+          </div>
+
+
           </a>
 
           {/* Center Subtle Nav Links (Desktop) */}
@@ -78,7 +81,7 @@ export default function Navbar() {
               href="#koleksi"
               className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-display font-semibold tracking-wider uppercase text-gold bg-charcoal-100 hover:bg-charcoal-50 border border-gold/30 hover:border-gold transition-all duration-300"
             >
-              <Sparkles className="w-3.5 h-3.5 text-botanical" />
+              <ShoppingCart className="w-3.5 h-3.5 text-botanical" />
               <span>Lihat Produk</span>
             </a>
 
