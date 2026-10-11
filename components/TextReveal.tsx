@@ -11,6 +11,8 @@ import {
   Award,
   Compass,
   Sparkles,
+  ShieldCheck,
+  Info,
 } from 'lucide-react';
 
 interface WordProps {
@@ -81,7 +83,7 @@ export default function TextReveal() {
   const headlineWords = headline.split(' ');
 
   const bodyText =
-    'Kretek Rempah SM membawa inspirasi kekayaan rempah dan tradisi kretek Indonesia ke dalam identitas merek yang khas.';
+    'KRETEK REMPAH ADALAH PRODUK HASIL RACIKAN REMPAH-REMPAH BERKHASIAT BERTUJUAN MERUBAH STIGMA ROKOK KONVENSIONAL.';
   const bodyWords = bodyText.split(' ');
 
   const imageY = useTransform(
@@ -195,59 +197,14 @@ export default function TextReveal() {
                   strokeWidth={1.3}
                 />
               </div>
-
-              <div>
-                <p className="text-sm font-medium text-[#f3f0e5]">
-                  Kretek Rempah SM
+              <div className="space-y-1">
+                <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/40">
+                  Heritage Line
                 </p>
-                <p className="mt-1 text-xs text-white/40">
-                  Rempah. Karakter. Kreasi.
+                <p className="text-sm text-white/70">
+                  Berakar pada rempah, dikenal karena karakter.
                 </p>
               </div>
-            </div>
-
-            {/* Three editorial pillars */}
-            <div className="mt-12 border-t border-white/10 sm:mt-16">
-              {pillars.map(({ number, title, label, description, Icon, accent }) => (
-                <motion.div
-                  key={number}
-                  initial={reduceMotion ? false : { opacity: 0, x: -14 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.5 }}
-                  className="group grid grid-cols-[36px_1fr_auto] items-start gap-3 border-b border-white/10 py-5 sm:grid-cols-[44px_1fr_auto] sm:gap-5 sm:py-6"
-                >
-                  <span
-                    className="pt-1 font-mono text-[10px]"
-                    style={{ color: accent }}
-                  >
-                    {number}
-                  </span>
-
-                  <div>
-                    <span
-                      className="font-mono text-[9px] uppercase tracking-[0.15em]"
-                      style={{ color: accent }}
-                    >
-                      {label}
-                    </span>
-
-                    <h3 className="mt-1.5 text-base font-semibold text-white/90 transition-colors group-hover:text-white sm:text-lg">
-                      {title}
-                    </h3>
-
-                    <p className="mt-2 max-w-md text-xs leading-6 text-white/45 sm:text-sm">
-                      {description}
-                    </p>
-                  </div>
-
-                  <Icon
-                    className="mt-1 h-5 w-5"
-                    style={{ color: accent }}
-                    strokeWidth={1.3}
-                  />
-                </motion.div>
-              ))}
             </div>
           </div>
 
@@ -267,7 +224,7 @@ export default function TextReveal() {
                 </span>
               </div>
 
-              <div className="group relative aspect-[4/5] overflow-hidden rounded-[2px] border border-[#b5d36c]/25 bg-[#151b12]">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-botanical/25 bg-charcoal-200 shadow-luxury">
                 <motion.div
                   style={{ scale: imageScale }}
                   className="absolute inset-0"
@@ -338,6 +295,151 @@ export default function TextReveal() {
             </motion.div>
           </div>
         </div>
+      {/* Product information comparison */}
+        <div className="mt-24 sm:mt-32">
+          <div className="mb-10 max-w-3xl">
+            <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-gold">
+              Memahami Komposisi
+            </p>
+            <h3 className="font-display text-3xl font-black leading-tight sm:text-5xl">
+              Setiap produk memiliki
+              <span className="text-gradient-gold"> karakter berbeda.</span>
+            </h3>
+            <p className="mt-5 text-sm leading-7 text-ivory-muted sm:text-base">
+              Komposisi dan proses produksi dapat berbeda antara produk
+              dan produsen. Karena itu, informasi bahan perlu dipahami
+              berdasarkan dokumentasi masing-masing produk.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-6">
+
+            {/* SM card */}
+            <motion.article
+              initial={{ opacity: 0, y: reduceMotion ? 0 : 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6 }}
+              className="relative overflow-hidden rounded-3xl border border-botanical/35 bg-charcoal-200 p-6 sm:p-9"
+            >
+              <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-botanical/[0.07] blur-3xl" />
+
+              <div className="relative">
+                <div className="mb-6 flex items-center justify-between gap-4">
+                  <span className="rounded-full border border-botanical/30 bg-botanical/10 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-botanical">
+                    Informasi Produk
+                  </span>
+                  <Leaf className="h-5 w-5 text-botanical" />
+                </div>
+
+                <h4 className="mb-5 font-display text-2xl font-black sm:text-3xl">
+                  Kretek Rempah SM
+                </h4>
+
+                <div className="space-y-5 text-sm leading-7 text-ivory-muted">
+                  <p>
+                    Produk ini dibuat dari rempah-rempah herbal berkualitas tinggi yang dipilih sesuai standar produksi CV Walatra / Acep Herbal.
+
+                  </p>
+
+                  <p>
+                    Sebagai pelengkap, digunakan madu bunga randu alami yang dikenal luas sebagai salah satu bahan alami yang sering dimanfaatkan dalam menjaga kesehatan.
+                  </p>
+
+                  <p>
+                    Seluruh proses pembuatannya dilakukan secara bertahap dan teliti berdasarkan pengalaman dalam mengolah bahan herbal. Hal ini bertujuan untuk menjaga kualitas dan karakter produk agar tetap konsisten.
+                  </p>
+                </div>
+
+                <div className="mt-8 flex items-start gap-3 border-t border-white/10 pt-5">
+                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-botanical" />
+                  <p className="text-xs leading-6 text-ivory-dark">
+                    Dengan perpaduan bahan alami dan proses produksi yang dilakukan secara cermat, produk ini hadir sebagai pilihan herbal untuk melengkapi GAYA HIDUP SEHAT.
+                  </p>
+                </div>
+              </div>
+            </motion.article>
+
+            {/* Conventional tobacco card */}
+            <motion.article
+              initial={{ opacity: 0, y: reduceMotion ? 0 : 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="relative overflow-hidden rounded-3xl border border-gold/20 bg-[#15140f] p-6 sm:p-9"
+            >
+              <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-gold/[0.06] blur-3xl" />
+
+              <div className="relative">
+                <div className="mb-6 flex items-center justify-between gap-4">
+                  <span className="rounded-full border border-gold/25 bg-gold/[0.07] px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-gold">
+                    Informasi Umum
+                  </span>
+                  <ShieldCheck className="h-5 w-5 text-gold" />
+                </div>
+
+                <h4 className="mb-5 font-display text-2xl font-black sm:text-3xl">
+                  Rokok Konvensional
+                </h4>
+
+                <div className="space-y-5 text-sm leading-7 text-ivory-muted">
+                  <p>
+                    Rokok yang beredar secara umum diproduksi menggunakan berbagai bahan tambahan seperti perasa dan aroma.
+                  </p>
+
+                  <p>
+                    Selain tembakau, beberapa produk menggunakan bahan pembawa aroma seperti propylene glycol.
+
+                  </p>
+
+                  <p>
+                    Beberapa produk rokok konvensional juga menggunakan bahan tambahan yang dapat menimbulkan risiko kesehatan bagi konsumen.
+                    mempengaruhi otak dan menyebabkan tingkat kecanduan (adiksi) fisik dan psikologis yang sangat tinggi
+                  </p>
+                </div>
+
+                <div className="mt-8 flex items-start gap-3 border-t border-white/10 pt-5">
+                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                  <p className="text-xs leading-6 text-ivory-dark">
+                    Memilih produk secara bijak merupakan langkah penting bagi konsumen.
+                  </p>
+                </div>
+              </div>
+            </motion.article>
+
+          </div>
+        </div>
+
+        {/* Closing statement */}
+        <motion.div
+          initial={{ opacity: 0, y: reduceMotion ? 0 : 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7 }}
+          className="relative mt-20 overflow-hidden rounded-3xl border border-gold/20 bg-charcoal-200 px-6 py-12 text-center sm:mt-28 sm:px-12 sm:py-16"
+        >
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-br from-botanical/[0.08] via-transparent to-gold/[0.06]"
+          />
+
+          <div className="relative mx-auto max-w-3xl">
+            <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.24em] text-botanical">
+              Filosofi Kretek Rempah SM
+            </p>
+
+            <h3 className="font-display text-3xl font-black leading-tight sm:text-5xl">
+              Rempah.
+              <span className="text-ivory-muted/50"> Karakter.</span>
+              <span className="block text-gradient-gold">Kreasi.</span>
+            </h3>
+
+            <p className="mx-auto mt-6 max-w-xl text-sm leading-7 text-ivory-muted sm:text-base">
+              Sebuah identitas yang terinspirasi oleh keberagaman bahan
+              dan kekayaan rempah Nusantara.
+            </p>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

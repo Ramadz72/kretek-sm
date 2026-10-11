@@ -418,10 +418,21 @@ export default function SequenceScroll({
           className="absolute inset-0 z-30 flex flex-col items-center justify-center px-4 text-center pointer-events-none sm:px-6"
         >
           <div className="mx-auto flex max-w-4xl flex-col items-center">
-            <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-black/50 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-gold backdrop-blur-md sm:text-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-              ROKOK KRETEK • KRETEK REMPAH SM
-            </span>
+            
+          <div className="relative mb-6 flex items-center justify-center">
+            {/* Gambar rokok sebagai background badge */}
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <img
+                src="/images/products/kretek-sm-stick.png"
+                alt=""
+                aria-hidden="true"
+                className="h-20 w-[340px] max-w-[90vw] object-contain opacity-90 sm:h-28 sm:w-[480px]"
+              />
+            </div>
+
+            {/* Lapisan gelap agar tulisan tetap terbaca */}
+            <div className="absolute inset-0 rounded-full bg-black/20 blur-md" />
+          </div>
 
             <h1 className="mb-6 max-w-5xl text-5xl font-black leading-[0.95] tracking-tight text-ivory font-display sm:text-7xl lg:text-8xl">
               Rempah.

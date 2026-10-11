@@ -30,10 +30,15 @@ export default function FinalCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-charcoal-200/90 border border-botanical/40 text-botanical font-mono text-xs uppercase tracking-editorial mb-8 shadow-inner"
         >
-          <Sparkles className="w-3.5 h-3.5 text-gold" />
-          KRETEK REMPAH INDONESIA
+          <div className="inline-flex items-center gap-2 px-4 py-2">
+          <img
+            src="/images/products/kretek-sm-stick kaduruk.png"
+            alt=""
+            aria-hidden="true"
+            className="h-20 w-[340px] max-w-[90vw] object-contain opacity-90 sm:h-28 sm:w-[480px]"
+          />
+        </div>
         </motion.div>
 
         {/* Headline */}
