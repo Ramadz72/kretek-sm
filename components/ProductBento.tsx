@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, ArrowRight, X, Check, Clock, Wind } from 'lucide-react';
+import { ShoppingBasket, ArrowRight, X, Check, Clock, Wind, Phone } from 'lucide-react';
 import { PRODUCTS, ProductVariant } from '@/lib/products';
 import { SITE_CONFIG } from '@/lib/site-config';
 
@@ -277,7 +277,7 @@ export default function ProductBento() {
             </div>
 
             <div className="pt-6 mt-6 border-t border-white/10 text-[11px] font-mono text-ivory-dark flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-botanical" />
+              <ShoppingBasket className="w-3.5 h-3.5 text-botanical" />
               <span>Karakter Buah Alami & Tembakau Pilihan</span>
             </div>
           </div>
@@ -376,7 +376,7 @@ export default function ProductBento() {
 
                     <div>
                       <span className="font-mono uppercase text-gold tracking-wider text-[11px] block mb-2 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5" /> Komposisi Rempah
+                        <ShoppingBasket className="w-3.5 h-3.5" /> Komposisi Rempah
                       </span>
                       <ul className="space-y-1.5 text-ivory-muted">
                         {selectedProduct.herbalIngredients.map((h, idx) => (
@@ -417,7 +417,10 @@ export default function ProductBento() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-botanical text-obsidian font-display font-bold text-xs uppercase tracking-wider hover:bg-botanical-light transition-all shadow-md"
                     >
-                      <span>Hubungi Kanal Resmi</span>
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/5">
+                        <Phone className="w-5 h-5" />
+                      </div>
+                      <span>Pesan Sekarang</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </a>
                   </div>

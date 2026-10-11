@@ -35,7 +35,7 @@ const SLIDES: ShowcaseSlide[] = [
   },
   {
     id: 'apel-orchard',
-    image: '/images/products/lifestyle-apel.jpg',
+    image: '/images/products/e.jpg',
     title: 'Kesegaran Alam Apel & Kesejukan Mint',
     subtitle: 'Varian Apel Mint • Refreshing Botanical',
     caption:
@@ -44,7 +44,7 @@ const SLIDES: ShowcaseSlide[] = [
   },
   {
     id: 'mangga-vista',
-    image: '/images/products/lifestyle-mangga.jpg',
+    image: '/images/products/mangga-mint.jpg',
     title: 'Eksotisme Buah Tropis Nusantara',
     subtitle: 'Varian Mangga Mint • Playful Harmony',
     caption:

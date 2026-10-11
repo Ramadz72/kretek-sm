@@ -1,9 +1,17 @@
+
 'use client';
 
 import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
-import { Leaf, Award, Compass } from 'lucide-react';
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  Leaf,
+  Award,
+  Compass,
+  Sparkles,
+} from 'lucide-react';
 
 interface WordProps {
   children: string;
@@ -12,164 +20,322 @@ interface WordProps {
 }
 
 function Word({ children, progress, range }: WordProps) {
-  const opacity = useTransform(progress, range, [0.15, 1]);
+  const opacity = useTransform(progress, range, [0.4, 1]);
   const color = useTransform(
     progress,
     range,
-    ['rgba(243, 240, 229, 0.25)', 'rgba(243, 240, 229, 1)']
+    ['rgba(243, 240, 229, 0.48)', 'rgba(243, 240, 229, 1)']
   );
 
   return (
-    <motion.span style={{ opacity, color }} className="inline-block mr-[0.25em] transition-colors">
+    <motion.span
+      style={{ opacity, color }}
+      className="mr-[0.24em] inline-block"
+    >
       {children}
     </motion.span>
   );
 }
 
+const pillars = [
+  {
+    number: '01',
+    title: 'Inspirasi Rempah',
+    label: 'BOTANICAL HERITAGE',
+    description:
+      'Inspirasi kekayaan rempah Nusantara menjadi bagian dari cerita dan identitas Kretek Rempah SM.',
+    Icon: Leaf,
+    accent: '#b5d36c',
+  },
+  {
+    number: '02',
+    title: 'Karakter Tembakau',
+    label: 'TOBACCO HERITAGE',
+    description:
+      'Kemloko, Kasturi, Podeng, Virgin, dan Srintil Temanggung merupakan jenis tembakau yang disebut dalam identitas produk.',
+    Icon: Award,
+    accent: '#c8a95e',
+  },
+  {
+    number: '03',
+    title: 'Identitas Nusantara',
+    label: 'INDONESIAN CHARACTER',
+    description:
+      'Bahasa visual yang mempertemukan inspirasi tradisi kretek Indonesia dengan pendekatan desain kontemporer.',
+    Icon: Compass,
+    accent: '#d9d2bd',
+  },
+];
+
 export default function TextReveal() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start 0.8', 'end 0.2'],
   });
 
-  const headline = 'Karakter yang berakar pada rempah Nusantara.';
+  const headline =
+    'Berakar dari Nusantara. Dikenal lewat karakter.';
   const headlineWords = headline.split(' ');
 
   const bodyText =
-    'Kretek Rempah SM menghadirkan identitas yang terinspirasi dari kekayaan bahan dan rempah Indonesia, dikemas dengan pendekatan visual yang khas.';
+    'Kretek Rempah SM membawa inspirasi kekayaan rempah dan tradisi kretek Indonesia ke dalam identitas merek yang khas.';
   const bodyWords = bodyText.split(' ');
 
-  // Parallax transform for botanical imagery
-  const imageY = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+  const imageY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    reduceMotion ? [0, 0] : [28, -28]
+  );
+
+  const imageScale = useTransform(
+    scrollYProgress,
+    [0, 1],
+    reduceMotion ? [1, 1] : [1.04, 1]
+  );
 
   return (
     <section
       id="story"
       ref={containerRef}
-      className="relative w-full py-28 sm:py-40 bg-charcoal-400 border-t border-botanical/15 overflow-hidden"
+      className="relative isolate w-full overflow-hidden border-y border-white/[0.08] bg-[#0a0d09] py-24 text-[#f3f0e5] sm:py-32 lg:py-40"
     >
-      {/* Decorative background grid and gradients */}
-      <div className="absolute inset-0 bg-dark-botanical opacity-60 pointer-events-none" />
-      <div className="absolute top-1/2 left-0 w-96 h-96 bg-botanical/5 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-10 right-0 w-96 h-96 bg-gold/5 rounded-full blur-[140px] pointer-events-none" />
+      {/* Dark botanical atmosphere */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+      >
+        <div className="absolute -left-48 top-24 h-[500px] w-[500px] rounded-full bg-[#718a3f]/10 blur-[150px]" />
+        <div className="absolute -right-40 bottom-0 h-[450px] w-[450px] rounded-full bg-[#a98946]/[0.08] blur-[140px]" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header Tag */}
-        <div className="flex items-center gap-3 mb-10">
-          <span className="w-10 h-[1px] bg-botanical" />
-          <span className="font-mono text-xs uppercase tracking-editorial text-botanical">
-            Identitas & Kisah Merek
+        <div className="absolute inset-0 opacity-[0.035] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:72px_72px]" />
+
+        <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-[#b5d36c]/20 to-transparent" />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        {/* Editorial section marker */}
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6 }}
+          className="mb-12 flex flex-wrap items-center justify-between gap-4 sm:mb-16"
+        >
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-[#b5d36c]" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#b5d36c] sm:text-xs">
+              Identitas & Kisah Merek
+            </span>
+          </div>
+
+          <span className="font-mono text-[9px] tracking-[0.18em] text-white/30">
+            KRETEK REMPAH SM / 001
           </span>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          {/* Left Column: Scrubbed Editorial Typography */}
-          <div className="lg:col-span-7 space-y-8">
-            <h2 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl leading-[1.08] tracking-tight">
-              {headlineWords.map((word, i) => {
-                const start = i / headlineWords.length;
-                const end = start + 1 / headlineWords.length;
+        <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-14">
+          {/* LEFT: editorial brand narrative */}
+          <div className="lg:col-span-7">
+
+            <h2 className="max-w-4xl text-[clamp(2.65rem,6.1vw,5.8rem)] font-black leading-[0.99] tracking-[-0.055em]">
+              {headlineWords.map((word, index) => {
+                const start = (index / headlineWords.length) * 0.48;
+                const end =
+                  ((index + 1) / headlineWords.length) * 0.48;
+
                 return (
-                  <Word key={i} progress={scrollYProgress} range={[start * 0.5, end * 0.5]}>
+                  <Word
+                    key={`${word}-${index}`}
+                    progress={scrollYProgress}
+                    range={[start, end]}
+                  >
                     {word}
                   </Word>
                 );
               })}
             </h2>
 
-            <div className="w-24 h-[1px] bg-gradient-to-r from-gold to-transparent" />
+            <motion.div
+              initial={reduceMotion ? false : { width: 0 }}
+              whileInView={{ width: 100 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              className="mt-8 h-px bg-gradient-to-r from-[#c8a95e] to-transparent"
+            />
 
-            <p className="text-xl sm:text-2xl font-sans font-light leading-relaxed">
-              {bodyWords.map((word, i) => {
-                const start = 0.4 + (i / bodyWords.length) * 0.5;
-                const end = start + 0.5 / bodyWords.length;
+            <p className="mt-7 max-w-2xl text-base font-light leading-8 text-white/65 sm:text-lg sm:leading-9">
+              {bodyWords.map((word, index) => {
+                const start =
+                  0.48 + (index / bodyWords.length) * 0.48;
+                const end = Math.min(
+                  1,
+                  0.48 + ((index + 1) / bodyWords.length) * 0.48
+                );
+
                 return (
-                  <Word key={i} progress={scrollYProgress} range={[start, Math.min(1, end)]}>
+                  <Word
+                    key={`${word}-${index}`}
+                    progress={scrollYProgress}
+                    range={[start, end]}
+                  >
                     {word}
                   </Word>
                 );
               })}
             </p>
 
-            {/* Three key pillars preview */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-white/10">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-botanical">
-                  <Leaf className="w-4 h-4" />
-                  <span className="font-mono text-xs uppercase tracking-wider text-ivory">
-                    17 Rempah Alami
-                  </span>
-                </div>
-                <p className="text-xs text-ivory-dark leading-relaxed">
-                  Perpaduan seimbang antara karakter manis, gurih, pedas, dan harum.
-                </p>
+            {/* Brand signature */}
+            <div className="mt-9 flex items-center gap-4">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#c8a95e]/30 bg-[#c8a95e]/[0.06]">
+                <ArrowDownRight
+                  className="h-5 w-5 text-[#c8a95e]"
+                  strokeWidth={1.3}
+                />
               </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-gold">
-                  <Award className="w-4 h-4" />
-                  <span className="font-mono text-xs uppercase tracking-wider text-ivory">
-                    5 Tembakau Pilihan
-                  </span>
-                </div>
-                <p className="text-xs text-ivory-dark leading-relaxed">
-                  Kemloko, Kasturi, Podeng, Virgin, dan Srintil Temanggung legendaris.
+              <div>
+                <p className="text-sm font-medium text-[#f3f0e5]">
+                  Kretek Rempah SM
+                </p>
+                <p className="mt-1 text-xs text-white/40">
+                  Rempah. Karakter. Kreasi.
                 </p>
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-ivory">
-                  <Compass className="w-4 h-4" />
-                  <span className="font-mono text-xs uppercase tracking-wider text-ivory">
-                    Asap Halus & Harum
+            {/* Three editorial pillars */}
+            <div className="mt-12 border-t border-white/10 sm:mt-16">
+              {pillars.map(({ number, title, label, description, Icon, accent }) => (
+                <motion.div
+                  key={number}
+                  initial={reduceMotion ? false : { opacity: 0, x: -14 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.5 }}
+                  className="group grid grid-cols-[36px_1fr_auto] items-start gap-3 border-b border-white/10 py-5 sm:grid-cols-[44px_1fr_auto] sm:gap-5 sm:py-6"
+                >
+                  <span
+                    className="pt-1 font-mono text-[10px]"
+                    style={{ color: accent }}
+                  >
+                    {number}
                   </span>
-                </div>
-                <p className="text-xs text-ivory-dark leading-relaxed">
-                  Aroma lembut alami yang tidak meninggalkan bau apek menyengat.
-                </p>
-              </div>
+
+                  <div>
+                    <span
+                      className="font-mono text-[9px] uppercase tracking-[0.15em]"
+                      style={{ color: accent }}
+                    >
+                      {label}
+                    </span>
+
+                    <h3 className="mt-1.5 text-base font-semibold text-white/90 transition-colors group-hover:text-white sm:text-lg">
+                      {title}
+                    </h3>
+
+                    <p className="mt-2 max-w-md text-xs leading-6 text-white/45 sm:text-sm">
+                      {description}
+                    </p>
+                  </div>
+
+                  <Icon
+                    className="mt-1 h-5 w-5"
+                    style={{ color: accent }}
+                    strokeWidth={1.3}
+                  />
+                </motion.div>
+              ))}
             </div>
           </div>
 
-          {/* Right Column: Luxury Asymmetrical Macro Botanical Card */}
-          <div className="lg:col-span-5 relative">
+          {/* RIGHT: botanical visual */}
+          <div className="relative lg:col-span-5">
             <motion.div
               style={{ y: imageY }}
-              className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-botanical/30 shadow-luxury group"
+              className="relative"
             >
-              <Image
-                src="/images/tobacco-macro.jpg"
-                alt="Makro Daun Tembakau Alami Kretek Rempah SM"
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/30 to-transparent" />
+              {/* Image index */}
+              <div className="mb-4 flex items-center justify-between">
+                <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#b5d36c]">
+                  Visual Archive / 01
+                </span>
+                <span className="font-mono text-[9px] text-white/30">
+                  NUSANTARA
+                </span>
+              </div>
 
-              {/* Editorial Tag Overlay */}
-              <div className="absolute bottom-6 left-6 right-6 p-5 rounded-2xl bg-charcoal-200/90 backdrop-blur-md border border-white/10">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-botanical">
-                    Arsip Botani
-                  </span>
-                  <span className="text-[10px] font-mono text-gold">Srintil & Kemloko</span>
+              <div className="group relative aspect-[4/5] overflow-hidden rounded-[2px] border border-[#b5d36c]/25 bg-[#151b12]">
+                <motion.div
+                  style={{ scale: imageScale }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src="/images/tobacco-macro.jpg"
+                    alt="Detail visual daun tembakau untuk identitas Kretek Rempah SM"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 42vw"
+                    className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                    priority={false}
+                  />
+                </motion.div>
+
+                <div className="absolute inset-0 bg-gradient-to-t from-[#080b08]/90 via-[#080b08]/10 to-[#080b08]/10" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#080b08]/15 to-transparent" />
+
+                {/* Fine editorial frame */}
+                <div className="pointer-events-none absolute inset-4 border border-white/20" />
+
+                <div className="absolute left-8 top-8">
+                  <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-white/65">
+                    Botanical Study
+                  </p>
+                  <div className="mt-3 h-px w-10 bg-[#c8a95e]" />
                 </div>
-                <p className="text-xs text-ivory-muted leading-relaxed font-sans">
-                  "Menghadirkan pengalaman menikmati kekayaan rasa Nusantara dalam balutan kretek yang memiliki karakter tersendiri."
-                </p>
+
+                <div className="absolute bottom-0 left-0 right-0 p-7 sm:p-9">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#c8a95e]">
+                    Karakter Bahan
+                  </span>
+
+                  <h3 className="mt-3 max-w-sm text-3xl font-semibold leading-tight tracking-[-0.035em] text-[#f3f0e5] sm:text-4xl">
+                    Terinspirasi
+                    <br />
+                    kekayaan alam.
+                  </h3>
+
+                  <p className="mt-4 max-w-sm text-xs leading-6 text-white/65 sm:text-sm">
+                    Sebuah eksplorasi visual tentang bahan, tekstur,
+                    dan warisan botani Nusantara.
+                  </p>
+                </div>
+              </div>
+
+              {/* Emblem card */}
+              <div className="absolute -right-3 top-16 flex h-[68px] w-[68px] rotate-6 items-center justify-center border border-[#c8a95e]/50 bg-[#11150f] p-3 shadow-2xl sm:-right-5 sm:h-[84px] sm:w-[84px]">
+                <Image
+                  src="/images/logo/logo-emblem.png"
+                  alt="Emblem Kretek Rempah SM"
+                  width={64}
+                  height={64}
+                  className="h-full w-full object-contain"
+                />
+              </div>
+
+              {/* Caption under image */}
+              <div className="mt-5 flex items-center justify-between gap-4 border-t border-white/10 pt-4">
+                <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-white/35">
+                  Kretek Rempah SM
+                </span>
+
+                <span className="flex items-center gap-2 text-[10px] text-white/55">
+                  Brand Identity
+                  <ArrowUpRight className="h-3.5 w-3.5 text-[#c8a95e]" />
+                </span>
               </div>
             </motion.div>
-
-            {/* Decorative Gold Accent Badge */}
-            <div className="absolute -top-5 -right-5 w-20 h-20 rounded-2xl bg-charcoal-100 border border-gold/40 flex items-center justify-center p-3 shadow-luxury-gold rotate-6 pointer-events-none">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/logo/logo-emblem.png"
-                alt="Emblem"
-                className="w-full h-full object-contain"
-              />
-            </div>
           </div>
         </div>
       </div>

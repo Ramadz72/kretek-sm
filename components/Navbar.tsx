@@ -34,7 +34,7 @@ export default function Navbar() {
             aria-label="Kembali ke Beranda Kretek Rempah SM"
           >
             
-          <div className="relative h-20 w-72 sm:h-16 sm:w-60">
+          <div className="relative h-24 w-72 sm:h-16 sm:w-60">
             <Image
               src="/images/logo/logo-horizontal.png"
               alt="Kretek Rempah SM Logo"

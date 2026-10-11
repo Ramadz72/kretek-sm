@@ -1,7 +1,8 @@
+
 'use client';
 
 import Image from 'next/image';
-import { Phone, Instagram, Mail, AlertTriangle, ArrowUp } from 'lucide-react';
+import { Phone, Instagram, Mail, ArrowUp } from 'lucide-react';
 import { SITE_CONFIG } from '@/lib/site-config';
 
 export default function Footer() {
@@ -12,24 +13,80 @@ export default function Footer() {
   return (
     <footer id="kontak" className="relative w-full bg-obsidian border-t border-botanical/20 pt-20 pb-28 text-ivory">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Mandatory Health Warning Box */}
-        <div className="mb-16 p-6 sm:p-8 rounded-3xl bg-charcoal-200 border border-gold/30 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4 text-left">
-            <div className="p-3 rounded-2xl bg-charcoal-50 text-gold border border-gold/30 shrink-0">
-              <AlertTriangle className="w-6 h-6" />
-            </div>
-            <div>
-              <span className="font-mono text-xs uppercase tracking-widest text-gold block mb-1 font-semibold">
-                Pemberitahuan Regulasi Tembakau Indonesia
+        
+        {/* Advanced Health Warning */}
+        <div className="mb-16 overflow-hidden rounded-2xl border border-[#77752c]/40 bg-[#090b08] shadow-[0_16px_50px_rgba(0,0,0,0.3)]">
+
+          {/* Top accent line */}
+          <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#b5a83a] to-transparent" />
+
+          <div className="grid grid-cols-1 md:grid-cols-[190px_minmax(0,1fr)_minmax(0,0.85fr)]">
+
+            {/* Official health warning image */}
+            <div className="relative min-h-[210px] overflow-hidden border-b border-white/10 md:min-h-[150px] md:border-b-0 md:border-r md:border-white/10">
+              <Image
+                src="/images/warnings/health-warning.jpg"
+                alt="Foto peringatan kesehatan resmi pada produk tembakau"
+                fill
+                sizes="(max-width: 768px) 100vw, 190px"
+                className="object-cover"
+              />
+
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent md:bg-gradient-to-r md:from-transparent md:to-black/10" />
+
+              <span className="absolute bottom-3 left-3 rounded-md border border-white/20 bg-black/70 px-2 py-1 font-mono text-[9px] uppercase tracking-widest text-white">
+                Health Warning
               </span>
-              <p className="text-sm font-mono text-ivory leading-relaxed font-bold">
+            </div>
+
+            {/* Main warning copy */}
+            <div className="flex flex-col justify-center gap-3 border-b border-white/10 p-5 sm:p-7 md:border-b-0 md:border-r md:border-white/10">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#e5c83d] shadow-[0_0_10px_rgba(229,200,61,0.5)]" />
+                <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#c9b94a]">
+                  Peringatan Kesehatan
+                </span>
+              </div>
+
+              <p className="font-mono text-sm font-bold uppercase leading-relaxed tracking-wide text-[#e5cf50] sm:text-base">
                 {SITE_CONFIG.legalNotice.healthWarning}
               </p>
+
+              <div className="h-px w-16 bg-gradient-to-r from-[#c9b94a]/70 to-transparent" />
+
+              <p className="text-[11px] leading-relaxed text-white/50">
+                Informasi risiko kesehatan terkait penggunaan produk tembakau.
+              </p>
             </div>
+
+            {/* Age restriction */}
+            <div className="flex flex-col justify-center gap-4 p-5 sm:p-7">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#c9b94a]/30 bg-[#c9b94a]/[0.07]">
+                  <span className="font-mono text-sm font-black text-[#e5cf50]">
+                    21+
+                  </span>
+                </div>
+
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#c9b94a]">
+                    Batas Usia
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-[#eee9d8]">
+                    Dewasa saja
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-xs leading-6 text-white/60">
+                {SITE_CONFIG.legalNotice.ageDescription}
+              </p>
+            </div>
+
           </div>
-          <span className="px-4 py-2 rounded-full bg-charcoal-50 border border-white/10 text-xs font-mono text-ivory-dark shrink-0">
-            {SITE_CONFIG.legalNotice.ageRestriction}
-          </span>
+
+          {/* Bottom accent */}
+          <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         </div>
 
         {/* Main Footer Content */}

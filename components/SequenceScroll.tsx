@@ -3,7 +3,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown, Sparkles } from 'lucide-react';
+import { ArrowDown, ShoppingCart } from 'lucide-react';
 import { SITE_CONFIG } from '@/lib/site-config';
 
 interface SequenceScrollProps {
@@ -380,6 +380,12 @@ export default function SequenceScroll({
         {/* Background atmosphere */}
         <div className="absolute inset-0 z-0 bg-dark-botanical pointer-events-none" />
 
+        {/* Global cinematic contrast */}
+        <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
+
+        {/* Left-side readability; product remains visible */}
+        <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-r from-[#050806]/45 via-[#050806]/15 to-transparent" />
+
         <div className="absolute -top-20 left-1/2 z-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-botanical/10 blur-[150px] pointer-events-none" />
 
         <div className="absolute bottom-10 left-1/2 z-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-gold/10 blur-[130px] pointer-events-none" />
@@ -412,23 +418,21 @@ export default function SequenceScroll({
           className="absolute inset-0 z-30 flex flex-col items-center justify-center px-4 text-center pointer-events-none sm:px-6"
         >
           <div className="mx-auto flex max-w-4xl flex-col items-center">
-            <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-botanical/30 bg-charcoal-200/90 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-editorial text-botanical shadow-inner sm:text-xs">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-botanical" />
-              INDONESIAN BOTANICAL HERITAGE
+            <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-black/50 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-gold backdrop-blur-md sm:text-xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+              ROKOK KRETEK • KRETEK REMPAH SM
             </span>
 
-            <h1 className="mb-6 text-5xl font-black leading-[1.05] tracking-tight text-ivory font-display sm:text-7xl lg:text-8xl">
-              Rempah. <span className="text-gradient-gold">Karakter.</span>{' '}
-              <span className="font-light italic">Kreasi.</span>
+            <h1 className="mb-6 max-w-5xl text-5xl font-black leading-[0.95] tracking-tight text-ivory font-display sm:text-7xl lg:text-8xl">
+              Rempah.
+              <span className="text-gradient-gold"> Karakter.</span>
+              <br />
+              <span className="font-light italic">Kretek Nusantara.</span>
             </h1>
 
             <p className="max-w-2xl text-base font-light leading-relaxed text-ivory-muted font-sans sm:text-xl">
-              Kenali{' '}
-              <strong className="font-semibold text-ivory">
-                Kretek Rempah SM
-              </strong>
-              , kretek dengan karakter visual yang berakar pada kekayaan
-              rempah Indonesia.
+              Mengenal Kretek Rempah SM, identitas kretek Indonesia
+              dengan inspirasi visual dari kekayaan rempah Nusantara.
             </p>
           </div>
         </motion.div>
@@ -485,36 +489,55 @@ export default function SequenceScroll({
           </div>
         </motion.div>
 
-        {/* Storytelling phase 4 */}
+        
+        {/* Storytelling phase 4 — final cinematic composition */}
         <motion.div
           style={{ opacity: opacity4, y: y4 }}
-          className="absolute inset-0 z-30 flex flex-col items-center justify-center px-4 text-center pointer-events-auto sm:px-6"
+          className="pointer-events-none absolute inset-0 z-30 flex items-center px-5 sm:px-10 lg:px-16"
         >
-          <div className="mx-auto flex max-w-2xl flex-col items-center">
-            <span className="mb-4 font-mono text-xs uppercase tracking-widest text-botanical">
-              KRETEK MULTIHERBAL NUSANTARA
-            </span>
+          <div className="relative w-full">
+            {/* Local shadow: menjaga teks terbaca tanpa menutupi produk */}
+            <div className="pointer-events-none absolute -left-8 -top-20 -bottom-20 w-[min(58vw,700px)] bg-gradient-to-r from-[#050806]/90 via-[#050806]/65 to-transparent blur-2xl" />
 
-            <h2 className="mb-6 text-4xl font-black leading-tight tracking-tight text-ivory font-display sm:text-6xl">
-              Jelajahi Koleksi
-              <br />
-              <span className="text-gradient-gold">
-                Kretek Rempah SM
-              </span>
-            </h2>
+            <div className="relative max-w-[min(90%,520px)] text-left">
+              <motion.div
+                initial={{ opacity: 0, x: -24 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7, ease: "easeOut" }}
+                className="mb-5 inline-flex items-center gap-3 rounded-full border border-lime-300/30 bg-black/40 px-4 py-2 backdrop-blur-md"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-lime-300 shadow-[0_0_12px_rgba(190,242,100,0.8)]" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.24em] text-lime-200 sm:text-[10px]">
+                  Kretek Rempah SM · Nusantara
+                </span>
+              </motion.div>
 
-            <p className="mb-8 max-w-lg text-base font-light text-ivory-muted sm:text-lg">
-              Sentuhan 17 rempah dan 5 tembakau pilihan, dirancang dalam
-              harmoni rasa yang berkelas.
-            </p>
+              <h2 className="text-4xl font-black leading-[0.98] tracking-[-0.045em] text-[#f7f3e8] sm:text-6xl lg:text-7xl">
+                Jelajahi
+                <span className="mt-2 block text-lime-300">
+                  Koleksi Kami.
+                </span>
+              </h2>
 
-            <a
-              href="#koleksi"
-              className="group relative inline-flex items-center gap-3 rounded-full bg-botanical px-8 py-4 text-sm font-bold uppercase tracking-widest text-obsidian shadow-luxury transition-all duration-300 hover:scale-105 hover:bg-botanical-light active:scale-95 font-display"
-            >
-              <span>LIHAT PRODUK</span>
-              <Sparkles className="h-4 w-4 text-obsidian transition-transform group-hover:rotate-45" />
-            </a>
+              <div className="my-6 h-px w-24 bg-gradient-to-r from-lime-300 to-transparent sm:my-7" />
+
+              <p className="max-w-md text-sm font-light leading-7 text-white/80 sm:text-base sm:leading-8">
+                Kenali Kretek Rempah SM melalui identitas visual yang
+                terinspirasi dari kekayaan rempah Nusantara.
+              </p>
+
+              <a
+                href="#koleksi"
+                className="pointer-events-auto group mt-7 inline-flex items-center gap-4 rounded-full border border-lime-200/40 bg-lime-300 px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-[#11170d] shadow-[0_8px_35px_rgba(163,230,53,0.18)] transition duration-300 hover:-translate-y-1 hover:bg-lime-200 active:translate-y-0 sm:mt-9 sm:px-7 sm:py-4"
+              >
+                <span>Lihat Koleksi</span>
+                <ShoppingCart className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </a>
+
+              <p className="mt-6 font-mono text-[9px] uppercase tracking-[0.2em] text-white/40">
+                Rempah · Karakter · Kreasi
+              </p>
+            </div>
           </div>
         </motion.div>
 

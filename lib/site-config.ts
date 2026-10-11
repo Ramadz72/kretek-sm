@@ -116,12 +116,12 @@ export const SITE_CONFIG = {
 
   // Contact Placeholders (Configurable by Owner)
   contact: {
-    whatsapp: '+62 812-XXXX-XXXX',
-    whatsappLink: 'https://wa.me/6281200000000',
-    instagram: '@kretekrempahsm.id',
-    instagramLink: 'https://instagram.com',
+    whatsapp: '+62895370190368',
+    whatsappLink: 'https://wa.me/62895370190368',
+    instagram: '@kretekrempahsm',
+    instagramLink: 'https://instagram.com/kretekrempahsm',
     email: 'kontak@kretekrempahsm.com',
-    address: 'Indonesia',
+    address: 'Perum, Jl. Wijaya Permai Jl. Noenoeng Tisnasaputra No.2 Blok A, Kahuripan, Kec. Tawang, Kab. Tasikmalaya, Jawa Barat 46115',
   },
 
   // Sequence Configuration
