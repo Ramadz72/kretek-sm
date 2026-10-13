@@ -33,7 +33,7 @@ export default function FinalCTA() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2">
           <img
-            src="/images/products/kretek-sm-stick kaduruk.png"
+            src="/images/products/kretek-sm-stick-kaduruk-kom.webp"
             alt=""
             aria-hidden="true"
             className="h-20 w-[340px] max-w-[90vw] object-contain opacity-90 sm:h-28 sm:w-[480px]"

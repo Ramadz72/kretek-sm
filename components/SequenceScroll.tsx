@@ -423,7 +423,7 @@ export default function SequenceScroll({
             {/* Gambar rokok sebagai background badge */}
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
               <img
-                src="/images/products/kretek-sm-stick.png"
+                src="/images/products/kretek-sm-stick-kom.webp"
                 alt=""
                 aria-hidden="true"
                 className="h-20 w-[340px] max-w-[90vw] object-contain opacity-90 sm:h-28 sm:w-[480px]"

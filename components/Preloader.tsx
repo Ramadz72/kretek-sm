@@ -43,7 +43,7 @@ export default function Preloader({ progress, isLoaded }: PreloaderProps) {
             className="relative w-24 h-24 sm:w-28 sm:h-28 mb-8"
           >
             <Image
-              src="/images/logo/logo-emblem.png"
+              src="/images/logo/logo-emblem.webp"
               alt="Kretek Rempah SM Emblem"
               fill
               className="object-contain drop-shadow-[0_0_25px_rgba(232,200,62,0.3)]"

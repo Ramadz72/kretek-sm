@@ -36,7 +36,7 @@ export default function Navbar() {
             
           <div className="relative h-30 w-30 sm:h-16 sm:w-60">
             <Image
-              src="/images/logo/logo-horizontal.png"
+              src="/images/logo/logo-horizontal.webp"
               alt="Kretek Rempah SM Logo"
               fill
               priority

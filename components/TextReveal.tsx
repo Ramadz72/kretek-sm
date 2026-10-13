@@ -230,7 +230,7 @@ export default function TextReveal() {
                   className="absolute inset-0"
                 >
                   <Image
-                    src="/images/tobacco-macro.jpg"
+                    src="/images/tobacco-macro.webp"
                     alt="Detail visual daun tembakau untuk identitas Kretek Rempah SM"
                     fill
                     sizes="(max-width: 1024px) 100vw, 42vw"
@@ -273,7 +273,7 @@ export default function TextReveal() {
               {/* Emblem card */}
               <div className="absolute -right-3 top-16 flex h-[68px] w-[68px] rotate-6 items-center justify-center border border-[#c8a95e]/50 bg-[#11150f] p-3 shadow-2xl sm:-right-5 sm:h-[84px] sm:w-[84px]">
                 <Image
-                  src="/images/logo/logo-emblem.png"
+                  src="/images/logo/logo-emblem.webp"
                   alt="Emblem Kretek Rempah SM"
                   width={64}
                   height={64}
