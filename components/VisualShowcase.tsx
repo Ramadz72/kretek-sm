@@ -26,7 +26,7 @@ const SLIDES: ShowcaseSlide[] = [
   },
   {
     id: 'cigar-plantation',
-    image: '/images/products/lifestyle-cigar.jpg',
+    image: '/images/products/g.jpg',
     title: 'Ambri Daun Tembakau yang Berkelas',
     subtitle: 'Varian Cigar • Tobacco in Tobacco',
     caption:
